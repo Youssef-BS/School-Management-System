@@ -2,13 +2,14 @@ import Course from '../models/Course.js';
 
 export const createCourse = async (req, res) => {
   try {
-    const { title, description , createdBy } = req.body;
+    const { title, description , createdBy , classroom } = req.body;
     const files = req.files.map(file => `/uploads/courses/${file.filename}`);
 
     const newCourse = new Course({
       title,
       description,
       createdBy,
+      classroom,
       files
     });
 

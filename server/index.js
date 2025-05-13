@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js';
+import classroomRoutes from './routes/classroom.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/classrooms', classroomRoutes);
 
 connectDB();
 

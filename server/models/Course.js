@@ -9,6 +9,10 @@ const courseSchema = new mongoose.Schema({
     required: true
   },
   files: [String], 
+  classroom: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Classroom'
+},
   createdAt: {
     type: Date,
     default: Date.now

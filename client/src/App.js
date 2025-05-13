@@ -1,74 +1,118 @@
+
 import { Routes, Route, Navigate } from "react-router-dom"
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "./contexts/AuthContext"
 
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import AdminDashboard from "./pages/admin/Dashboard"
-import TeacherDashboard from "./pages/teacher/Dashboard"
-import ParentDashboard from "./pages/parent/Dashboard"
-import StudentDashboard from "./pages/student/Dashboard"
-import NotFound from "./pages/NotFound"
 
-import ProtectedRoute from "./components/ProtectedRoute"
+import MainLayout from "./layouts/MainLayout"
+import AuthLayout from "./layouts/AuthLayout"
+
+import HomePage from "./pages/HomePage"
+import LoginPage from "./pages/auth/LoginPage"
+import RegisterPage from "./pages/auth/RegisterPage"
+import DashboardPage from "./pages/dashboard/DashboardPage"
+import UsersPage from "./pages/admin/UsersPage"
+import ClassroomsPage from "./pages/admin/ClassroomsPage"
+import CoursesPage from "./pages/courses/CoursesPage"
+import TeacherClassesPage from "./pages/teacher/TeacherClassesPage"
+import StudentDashboardPage from "./pages/student/StudentDashboardPage"
+import ParentDashboardPage from "./pages/parent/ParentDashboardPage"
+import NotFoundPage from "./pages/NotFoundPage"
+
+
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, isAuthenticated } = useAuth()
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />
+  }
+
+  return children
+}
 
 function App() {
-  const { user } = useAuth()
-
   return (
-    <div className="app">
-      <Routes>
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-        <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+    <Routes>
+
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+
+
+      <Route path="/" element={<AuthLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+      </Route>
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<DashboardPage />} />
+
         <Route
-          path="/dashboard"
+          path="users"
           element={
-            <ProtectedRoute>
-              {user?.role === "admin" && <AdminDashboard />}
-              {user?.role === "teacher" && <TeacherDashboard />}
-              {user?.role === "parent" && <ParentDashboard />}
-              {user?.role === "student" && <StudentDashboard />}
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/teacher/*"
-          element={
-            <ProtectedRoute requiredRole="teacher">
-              <TeacherDashboard />
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <UsersPage />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/parent/*"
+          path="classrooms"
           element={
-            <ProtectedRoute requiredRole="parent">
-              <ParentDashboard />
+            <ProtectedRoute allowedRoles={["admin", "teacher"]}>
+              <ClassroomsPage />
             </ProtectedRoute>
           }
         />
+
         <Route
-          path="/student/*"
+          path="teacher/classes"
           element={
-            <ProtectedRoute requiredRole="student">
-              <StudentDashboard />
+            <ProtectedRoute allowedRoles={["teacher"]}>
+              <TeacherClassesPage />
             </ProtectedRoute>
           }
         />
 
-        <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+        <Route
+          path="courses"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "teacher", "student"]}>
+              <CoursesPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+        <Route
+          path="student/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <StudentDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="parent/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["parent"]}>
+              <ParentDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+    </Routes>
   )
 }
 

@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     default: 'student'
   },
   absences: [absenceSchema], 
+  classes: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Classroom'
+}]
 });
 
 const User = mongoose.model('User', userSchema);
