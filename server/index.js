@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from './routes/course.routes.js';
 import classroomRoutes from './routes/classroom.route.js';
+import messageRoutes from './routes/message.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/classrooms', classroomRoutes);
+app.use('/api/messages', messageRoutes);
 
 connectDB();
 
