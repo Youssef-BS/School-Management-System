@@ -20,66 +20,66 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-emerald-600 shadow-md z-20">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center">
-            <button
-              onClick={toggleSidebar}
-              className="text-white md:hidden mr-4"
-              aria-label="Toggle sidebar"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+      {isAuthenticated && (
+  <header className="bg-emerald-600 shadow-md z-20">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div className="flex items-center">
+              <button
+                onClick={toggleSidebar}
+                className="text-white md:hidden mr-4"
+                aria-label="Toggle sidebar"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <Link to="/" className="text-xl font-semibold text-white tracking-wide">
-              المدرسة الإعدادية شنني
-            </Link>
-          </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <Link to="/" className="text-xl font-semibold text-white tracking-wide">
+                المدرسة الإعدادية شنني
+              </Link>
+            </div>
 
-          <div className="flex items-center space-x-4">
-            {isAuthenticated ? (
-              <>
-                <div className="hidden md:flex items-center space-x-3">
-                  <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-medium">
-                    {user.name.charAt(0)}
+            <div className="flex items-center space-x-4">
+              {isAuthenticated ? (
+                <>
+                  <div className="hidden md:flex items-center space-x-3">
+                    <Link to="/profile" className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-medium">
+                      {user.name.charAt(0)}
+                    </Link>
+                    <span className="text-white">{user.name}</span>
                   </div>
-                  <span className="text-white">{user.name}</span>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="bg-white/20 hover:bg-white/30 text-white px-4 py-1 rounded-md text-sm font-medium transition backdrop-blur-sm"
-                >
-                  تسجيل الخروج
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="text-white hover:text-emerald-200 transition text-sm"
-                >
-                  تسجيل الدخول
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-white/20 hover:bg-white/30 text-white px-4 py-1 rounded-md text-sm font-medium transition backdrop-blur-sm"
-                >
-                  إنشاء حساب
-                </Link>
-              </>
-            )}
+                  <button
+                    onClick={handleLogout}
+                    className="bg-white/20 hover:bg-white/30 text-white px-4 py-1 rounded-md text-sm font-medium transition backdrop-blur-sm"
+                  >
+                    تسجيل الخروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-white hover:text-emerald-200 transition text-sm"
+                  >
+                    تسجيل الدخول
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="bg-white/20 hover:bg-white/30 text-white px-4 py-1 rounded-md text-sm font-medium transition backdrop-blur-sm"
+                  >
+                    إنشاء حساب
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </header>
-
+        </header>
+      )}
       <div className="flex flex-1">
         {isAuthenticated && (
           <aside

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { API_URL } from "../../config/constants"
+import { useAuth } from "../../contexts/AuthContext"
 
 const ParentDashboardPage = () => {
   const [students, setStudents] = useState([])
@@ -9,7 +10,9 @@ const ParentDashboardPage = () => {
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [studentClasses, setStudentClasses] = useState([])
   const [studentCourses, setStudentCourses] = useState([])
+  const { user } = useAuth()
 
+  console.log("User:", user)  
   useEffect(() => {
     fetchStudents()
   }, [])
@@ -17,8 +20,8 @@ const ParentDashboardPage = () => {
   const fetchStudents = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.get(`${API_URL}/api/users`)
-      const allStudents = response.data.filter((user) => user.role === "student")
+      const response = await axios.get(`${API_URL}/api/users/${user.id}`)
+      const allStudents = response.data.children || [];
       setStudents(allStudents)
 
       if (allStudents.length > 0) {

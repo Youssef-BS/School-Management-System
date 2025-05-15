@@ -14,7 +14,7 @@ const AuthLayout = () => {
       <header className="bg-emerald-600 text-white shadow-md">
         <div className="container mx-auto px-4 py-3">
           <Link to="/" className="text-xl font-bold">
-            EduLink
+            المدرسة الإعدادية شنني
           </Link>
         </div>
       </header>
@@ -26,7 +26,7 @@ const AuthLayout = () => {
       </div>
 
       <footer className="bg-white py-4 text-center text-gray-600 text-sm">
-        <p>جميع الحقوق محفوظة &copy; {new Date().getFullYear()} - EduLink</p>
+        <p>جميع الحقوق محفوظة &copy; {new Date().getFullYear()} - المدرسة الإعدادية شنني</p>
       </footer>
     </div>
   )

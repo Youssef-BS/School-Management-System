@@ -4,10 +4,17 @@ import bcrypt from 'bcryptjs';
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, children } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword, role });
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      children: role === 'parent' ? children : [] 
+    });
 
     await newUser.save();
     res.status(201).json(newUser);
@@ -28,7 +35,9 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id)
+      .populate('children', 'name email'); 
+
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (err) {
@@ -36,21 +45,39 @@ export const getUserById = async (req, res) => {
   }
 };
 
+
 export const updateUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-    const updateData = { name, email, role };
+    const { name, email, password, role, children } = req.body;
+
+    const updateData = {
+      name,
+      email,
+      role
+    };
 
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
+    if (role === 'parent') {
+      updateData.children = children || [];
+    } else {
+      updateData.children = []; 
+    }
+
     const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const deleteUser = async (req, res) => {
   try {

@@ -1,3 +1,4 @@
+// Updated UsersPage Component
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { API_URL, USER_ROLES } from "../../config/constants"
@@ -5,6 +6,7 @@ import Swal from "sweetalert2"
 
 const UsersPage = () => {
   const [users, setUsers] = useState([])
+  console.log(users)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const [showModal, setShowModal] = useState(false)
@@ -15,6 +17,7 @@ const UsersPage = () => {
     email: "",
     password: "",
     role: "student",
+    children: [],
   })
 
   useEffect(() => {
@@ -29,7 +32,6 @@ const UsersPage = () => {
       setError("")
     } catch (err) {
       setError("فشل في جلب بيانات المستخدمين")
-      console.error(err)
       Swal.fire({
         title: "خطأ!",
         text: "فشل في جلب بيانات المستخدمين",
@@ -51,6 +53,7 @@ const UsersPage = () => {
         email: user.email,
         password: "",
         role: user.role,
+        children: user.children?.map(child => child._id) || []
       })
     } else {
       setFormData({
@@ -58,6 +61,7 @@ const UsersPage = () => {
         email: "",
         password: "",
         role: "student",
+        children: []
       })
     }
 
@@ -77,26 +81,27 @@ const UsersPage = () => {
     }))
   }
 
+  const handleChildrenChange = (e) => {
+    const options = e.target.options
+    const selectedChildren = []
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedChildren.push(options[i].value)
+      }
+    }
+    setFormData((prev) => ({ ...prev, children: selectedChildren }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
       if (modalMode === "add") {
         await axios.post(`${API_URL}/api/users`, formData)
-        Swal.fire({
-          title: "تمت الإضافة!",
-          text: "تم إضافة المستخدم بنجاح",
-          icon: "success",
-          confirmButtonText: "حسناً",
-        })
+        Swal.fire({ title: "تمت الإضافة!", text: "تم إضافة المستخدم بنجاح", icon: "success", confirmButtonText: "حسناً" })
       } else {
         await axios.put(`${API_URL}/api/users/${selectedUser._id}`, formData)
-        Swal.fire({
-          title: "تم التحديث!",
-          text: "تم تحديث بيانات المستخدم بنجاح",
-          icon: "success",
-          confirmButtonText: "حسناً",
-        })
+        Swal.fire({ title: "تم التحديث!", text: "تم تحديث بيانات المستخدم بنجاح", icon: "success", confirmButtonText: "حسناً" })
       }
 
       fetchUsers()
@@ -104,12 +109,7 @@ const UsersPage = () => {
     } catch (err) {
       const errorMsg = err.response?.data?.message || "حدث خطأ أثناء حفظ البيانات"
       setError(errorMsg)
-      Swal.fire({
-        title: "خطأ!",
-        text: errorMsg,
-        icon: "error",
-        confirmButtonText: "حسناً",
-      })
+      Swal.fire({ title: "خطأ!", text: errorMsg, icon: "error", confirmButtonText: "حسناً" })
     }
   }
 
@@ -155,10 +155,7 @@ const UsersPage = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">إدارة المستخدمين</h1>
-        <button
-          onClick={() => handleOpenModal("add")}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded"
-        >
+        <button onClick={() => handleOpenModal("add")} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded">
           إضافة مستخدم جديد
         </button>
       </div>
@@ -172,158 +169,52 @@ const UsersPage = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  الاسم
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  البريد الإلكتروني
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  نوع الحساب
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  الإجراءات
-                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">البريد الإلكتروني</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">نوع الحساب</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {users.map((user) => (
                 <tr key={user._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{user.email}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${
-                        user.role === "admin"
-                          ? "bg-purple-100 text-purple-800"
-                          : user.role === "teacher"
-                            ? "bg-blue-100 text-blue-800"
-                            : user.role === "parent"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-green-100 text-green-800"
-                      }`}
-                    >
-                      {getRoleLabel(user.role)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => handleOpenModal("edit", user)}
-                      className="text-indigo-600 hover:text-indigo-900 ml-4"
-                    >
-                      تعديل
-                    </button>
-                    <button onClick={() => handleDelete(user._id)} className="text-red-600 hover:text-red-900">
-                      حذف
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{getRoleLabel(user.role)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                    <button onClick={() => handleOpenModal("edit", user)} className="text-green-600 hover:text-green-900">تعديل</button>
+                    <button onClick={() => handleDelete(user._id)} className="text-red-600 hover:text-red-900">حذف</button>
                   </td>
                 </tr>
               ))}
-
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
-                    لا يوجد مستخدمين
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* Add/Edit User Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">
-              {modalMode === "add" ? "إضافة مستخدم جديد" : "تعديل بيانات المستخدم"}
-            </h2>
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-                  الاسم
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-                  البريد الإلكتروني
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="form-input"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
-                  كلمة المرور {modalMode === "edit" && "(اتركها فارغة إذا لم ترغب في تغييرها)"}
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="form-input"
-                  required={modalMode === "add"}
-                />
-              </div>
-
-              <div className="mb-6">
-                <label htmlFor="role" className="block text-gray-700 font-bold mb-2">
-                  نوع الحساب
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="form-input"
-                  required
-                >
-                  <option value={USER_ROLES.ADMIN}>مدير</option>
-                  <option value={USER_ROLES.TEACHER}>معلم</option>
-                  <option value={USER_ROLES.STUDENT}>طالب</option>
-                  <option value={USER_ROLES.PARENT}>ولي أمر</option>
+          <div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
+            <h2 className="text-xl font-bold mb-4">{modalMode === "add" ? "إضافة مستخدم" : "تعديل مستخدم"}</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="الاسم" className="w-full border px-3 py-2 rounded" required />
+              <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="البريد الإلكتروني" className="w-full border px-3 py-2 rounded" required />
+              <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="كلمة المرور" className="w-full border px-3 py-2 rounded" />
+              <select name="role" value={formData.role} onChange={handleChange} className="w-full border px-3 py-2 rounded">
+                {Object.values(USER_ROLES).map((role) => (
+                  <option key={role} value={role}>{getRoleLabel(role)}</option>
+                ))}
+              </select>
+              {formData.role === 'parent' && (
+                <select multiple value={formData.children} onChange={handleChildrenChange} className="w-full border px-3 py-2 rounded">
+                  {users.filter(u => u.role === 'student').map(child => (
+                    <option key={child._id} value={child._id}>{child.name}</option>
+                  ))}
                 </select>
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleCloseModal}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                >
-                  إلغاء
-                </button>
-                <button
-                  type="submit"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  {modalMode === "add" ? "إضافة" : "حفظ التغييرات"}
-                </button>
+              )}
+              <div className="flex justify-end gap-2">
+                <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">حفظ</button>
+                <button onClick={handleCloseModal} type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">إلغاء</button>
               </div>
             </form>
           </div>

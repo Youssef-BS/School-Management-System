@@ -19,8 +19,15 @@ const userSchema = new mongoose.Schema({
   classes: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: 'Classroom'
-}]
+}] ,
+
+  children: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
 });
+
+
 
 const User = mongoose.model('User', userSchema);
 export default User;

@@ -17,6 +17,8 @@ import TeacherClassesPage from "./pages/teacher/TeacherClassesPage"
 import StudentDashboardPage from "./pages/student/StudentDashboardPage"
 import ParentDashboardPage from "./pages/parent/ParentDashboardPage"
 import NotFoundPage from "./pages/NotFoundPage"
+import Profile from "./pages/profile/Profile"
+
 
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -63,6 +65,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <UsersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute  >
+              <Profile />
             </ProtectedRoute>
           }
         />

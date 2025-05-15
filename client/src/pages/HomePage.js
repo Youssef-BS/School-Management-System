@@ -1,260 +1,166 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { BookOpen, Users, UserCheck, Shield, Clock, Award } from "lucide-react";
 
 const HomePage = () => {
   return (
-    <div className="bg-white">
-      <section className="bg-gradient-to-b from-emerald-600 to-emerald-800 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">مرحباً بك في منصة EduLink التعليمية</h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            منصة تعليمية متكاملة تربط بين المعلمين والطلاب وأولياء الأمور لتحسين العملية التعليمية
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              to="/register"
-              className="bg-white text-emerald-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-bold text-lg"
-            >
-              إنشاء حساب جديد
-            </Link>
-            <Link
-              to="/login"
-              className="bg-emerald-700 text-white hover:bg-emerald-800 border border-white px-6 py-3 rounded-lg font-bold text-lg"
-            >
-              تسجيل الدخول
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">مميزات المنصة</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-emerald-500">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-3 text-gray-800">إدارة المواد الدراسية</h3>
-              <p className="text-gray-600 text-center">
-                إمكانية رفع وتنظيم المواد الدراسية والملفات بشكل سهل ومنظم للطلاب
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-emerald-500">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-3 text-gray-800">إدارة الفصول الدراسية</h3>
-              <p className="text-gray-600 text-center">
-                تنظيم الفصول الدراسية وتوزيع الطلاب والمعلمين وإدارة الجداول الدراسية
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-emerald-500">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-3 text-gray-800">متابعة الحضور والغياب</h3>
-              <p className="text-gray-600 text-center">
-                تسجيل حضور وغياب الطلاب وإمكانية متابعتها من قبل المعلمين وأولياء الأمور
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">المنصة تخدم جميع الأطراف</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-2 text-gray-800">المدير</h3>
-              <p className="text-gray-600 text-center">إدارة كاملة للمستخدمين والفصول والمواد الدراسية</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                  <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-2 text-gray-800">المعلم</h3>
-              <p className="text-gray-600 text-center">إدارة الفصول ورفع المواد الدراسية وتسجيل الحضور والغياب</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-2 text-gray-800">الطالب</h3>
-              <p className="text-gray-600 text-center">الوصول للمواد الدراسية ومتابعة الجدول الدراسي</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-center mb-2 text-gray-800">ولي الأمر</h3>
-              <p className="text-gray-600 text-center">متابعة أداء الأبناء والحضور والغياب والتواصل مع المعلمين</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-emerald-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">ابدأ استخدام المنصة الآن</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            انضم إلى منصة EduLink التعليمية واستفد من جميع المميزات المتاحة لتحسين العملية التعليمية
-          </p>
-          <Link
-            to="/register"
-            className="bg-white text-emerald-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-lg inline-block"
-          >
-            سجل الآن مجاناً
-          </Link>
-        </div>
-      </section>
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">EduLink</h3>
-              <p className="text-gray-300">
-                منصة تعليمية متكاملة تهدف إلى تحسين التواصل بين المعلمين والطلاب وأولياء الأمور
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-4">روابط سريعة</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link to="/" className="text-gray-300 hover:text-white">
-                    الرئيسية
+    <>
+      <Navbar />
+      <div className="min-h-screen flex flex-col w-fully">
+        <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="md:w-1/2 mb-10 md:mb-0">
+                <h1 className="text-4xl md:text-5xl font-bold mb-6">منصة المدرسة الإعدادية شنني التعليمية المتكاملة</h1>
+                <p className="text-xl mb-8">
+                  نربط بين الطلاب والمعلمين وأولياء الأمور والإدارة في بيئة تعليمية تفاعلية متكاملة.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Link
+                    to="/register"
+                    className="bg-white text-green-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-bold text-lg"
+                  >
+                    ابدأ الآن مجاناً
                   </Link>
-                </li>
-                <li>
-                  <Link to="/login" className="text-gray-300 hover:text-white">
-                    تسجيل الدخول
+                  <Link
+                    to="/about"
+                    className="bg-transparent border-2 border-white hover:bg-white/10 px-6 py-3 rounded-lg font-bold text-lg"
+                  >
+                    تعرف علينا
                   </Link>
-                </li>
-                <li>
-                  <Link to="/register" className="text-gray-300 hover:text-white">
-                    إنشاء حساب
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-4">تواصل معنا</h3>
-              <p className="text-gray-300">البريد الإلكتروني: info@edulink.com</p>
-              <p className="text-gray-300 mt-2">الهاتف: +123 456 7890</p>
+                </div>
+              </div>
+              <div className="md:w-1/2">
+                <img
+                  src="https://img.freepik.com/free-vector/online-learning-isometric-concept_1284-17947.jpg?w=2000"
+                  alt="المدرسة الإعدادية شنني Platform"
+                  className="rounded-lg shadow-xl"
+                />
+              </div>
             </div>
           </div>
+        </section>
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">مميزات منصة المدرسة الإعدادية شنني</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                توفر منصتنا مجموعة متكاملة من الأدوات والميزات لتحسين العملية التعليمية وتسهيل التواصل بين جميع الأطراف.
+              </p>
+            </div>
 
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-            <p>جميع الحقوق محفوظة &copy; {new Date().getFullYear()} - EduLink</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { icon: <BookOpen />, title: "إدارة المواد الدراسية", text: "إمكانية رفع وتنظيم المواد الدراسية والواجبات والاختبارات بطريقة سهلة وفعالة." },
+                { icon: <Users />, title: "التواصل الفعال", text: "تواصل مباشر بين المعلمين والطلاب وأولياء الأمور من خلال نظام رسائل متكامل." },
+                { icon: <UserCheck />, title: "متابعة الحضور", text: "نظام متكامل لتسجيل ومتابعة حضور الطلاب وإشعار أولياء الأمور بشكل فوري." },
+                { icon: <Shield />, title: "إدارة الصلاحيات", text: "نظام متطور لإدارة صلاحيات المستخدمين حسب أدوارهم في المنظومة التعليمية." },
+                { icon: <Clock />, title: "جدولة الحصص", text: "إدارة جداول الحصص الدراسية وتنظيم المواعيد بشكل فعال ومرن." },
+                { icon: <Award />, title: "تقارير الأداء", text: "تقارير تفصيلية عن أداء الطلاب ومستوى تقدمهم في المواد الدراسية المختلفة." }
+              ].map(({ icon, title, text }, index) => (
+                <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-green-100 p-3 rounded-full w-fit mb-6 text-green-600 w-8 h-8">
+                    {icon}
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{title}</h3>
+                  <p className="text-gray-600">{text}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
-  )
-}
+        </section>
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">منصة لجميع أطراف العملية التعليمية</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                توفر المدرسة الإعدادية شنني واجهات مخصصة لكل مستخدم حسب دوره في المنظومة التعليمية.
+              </p>
+            </div>
 
-export default HomePage
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="bg-gradient-to-b from-green-500 to-green-600 text-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="text-2xl font-bold mb-4">المعلمون</h3>
+                <ul className="space-y-2 mb-6">
+                  {["إدارة المواد الدراسية", "تسجيل الحضور والغياب", "رفع الواجبات والاختبارات", "التواصل مع الطلاب وأولياء الأمور"].map((item, i) => (
+                    <li key={i} className="flex items-center space-x-2 space-x-reverse">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/register"
+                  className="block text-center bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg font-bold"
+                >
+                  تسجيل كمعلم
+                </Link>
+              </div>
+
+              <div className="bg-gradient-to-b from-emerald-500 to-emerald-600 text-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="text-2xl font-bold mb-4">الطلاب</h3>
+                <ul className="space-y-2 mb-6">
+                  {["الوصول للمواد الدراسية", "تسليم الواجبات", "متابعة الدرجات والتقييمات", "التواصل مع المعلمين"].map((item, i) => (
+                    <li key={i} className="flex items-center space-x-2 space-x-reverse">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/register"
+                  className="block text-center bg-white text-emerald-600 hover:bg-emerald-50 px-4 py-2 rounded-lg font-bold"
+                >
+                  تسجيل كطالب
+                </Link>
+              </div>
+
+              {/* أولياء الأمور */}
+              <div className="bg-gradient-to-b from-teal-500 to-teal-600 text-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="text-2xl font-bold mb-4">أولياء الأمور</h3>
+                <ul className="space-y-2 mb-6">
+                  {["متابعة الحضور والغياب", "مراقبة أداء الطلاب", "التواصل مع المعلمين", "الاطلاع على الجداول والتقارير"].map((item, i) => (
+                    <li key={i} className="flex items-center space-x-2 space-x-reverse">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/register"
+                  className="block text-center bg-white text-teal-600 hover:bg-teal-50 px-4 py-2 rounded-lg font-bold"
+                >
+                  تسجيل كولي أمر
+                </Link>
+              </div>
+
+              {/* الإدارة */}
+              <div className="bg-gradient-to-b from-cyan-500 to-cyan-600 text-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="text-2xl font-bold mb-4">الإدارة</h3>
+                <ul className="space-y-2 mb-6">
+                  {["إدارة المستخدمين", "تخصيص الصلاحيات", "إصدار التقارير", "متابعة العملية التعليمية"].map((item, i) => (
+                    <li key={i} className="flex items-center space-x-2 space-x-reverse">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/register"
+                  className="block text-center bg-white text-cyan-600 hover:bg-cyan-50 px-4 py-2 rounded-lg font-bold"
+                >
+                  تسجيل كإداري
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+export default HomePage;
