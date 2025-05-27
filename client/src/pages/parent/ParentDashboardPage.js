@@ -10,6 +10,7 @@ const ParentDashboardPage = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentClasses, setStudentClasses] = useState([]);
   const [studentCourses, setStudentCourses] = useState([]);
+  const [studentAbsences, setStudentAbsences] = useState([]);
   const { user } = useAuth();
 
   // Messaging state
@@ -53,6 +54,8 @@ const ParentDashboardPage = () => {
     try {
       const studentResponse = await axios.get(`${API_URL}/api/users/${studentId}`);
       const studentData = studentResponse.data;
+
+      setStudentAbsences(studentData.absences || []);
 
       const classroomsResponse = await axios.get(`${API_URL}/api/classrooms`);
       const allClassrooms = classroomsResponse.data;
@@ -141,15 +144,11 @@ const ParentDashboardPage = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-EG", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(date);
+
   };
 
   return (
-    <div>
+    <div className="p-6">
       {/* Messages notification bell */}
       <div className="fixed bottom-4 right-4 z-50">
         <button 
@@ -167,7 +166,7 @@ const ParentDashboardPage = () => {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold mb-6">متابعة الأبناء</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">لوحة ولي الأمر</h1>
 
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
@@ -282,9 +281,147 @@ const ParentDashboardPage = () => {
             </div>
           </div>
 
-          {/* Rest of your existing parent dashboard UI */}
+          {/* Student details section */}
           <div className="w-full md:w-3/4">
-            {/* ... existing student details, attendance, classes, and courses sections ... */}
+            {selectedStudent ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Student Info Card */}
+                <div className="bg-white rounded-2xl shadow-md p-5">
+                  <h2 className="text-xl font-semibold text-emerald-700 mb-4 border-b pb-2">
+                    معلومات الطالب
+                  </h2>
+                  <div className="space-y-3">
+                    <p>
+                      <span className="font-bold">الاسم:</span> {selectedStudent.name}
+                    </p>
+                    <p>
+                      <span className="font-bold">البريد الإلكتروني:</span> {selectedStudent.email}
+                    </p>
+                    <p>
+                      <span className="font-bold">رقم الهاتف:</span> {selectedStudent.phone || "غير متوفر"}
+                    </p>
+                    <p>
+                      <span className="font-bold">تاريخ التسجيل:</span> {formatDate(selectedStudent.createdAt)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Attendance Card */}
+                <div className="bg-white rounded-2xl shadow-md p-5">
+                  <h2 className="text-xl font-semibold text-emerald-700 mb-4 border-b pb-2">
+                    الحضور والغياب
+                  </h2>
+                  {studentAbsences.length > 0 ? (
+                    <ul className="divide-y divide-gray-200">
+                      {studentAbsences.slice(0, 5).map((absence) => (
+                        <li key={absence._id} className="py-3">
+                          <p className="text-sm text-gray-700">التاريخ: {formatDate(absence.date)}</p>
+                          <p
+                            className={`text-sm font-bold ${
+                              absence.status === "absent" ? "text-red-600" : "text-green-600"
+                            }`}
+                          >
+                            الحالة: {absence.status === "absent" ? "غائب" : "حاضر"}
+                          </p>
+                          {absence.note && (
+                            <p className="text-xs text-gray-500 mt-1">ملاحظة: {absence.note}</p>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-center text-gray-500">لا توجد سجلات حضور أو غياب</p>
+                  )}
+                </div>
+
+                {/* Classes Card */}
+                <div className="bg-white rounded-2xl shadow-md p-5">
+                  <h2 className="text-xl font-semibold text-emerald-700 mb-4 border-b pb-2">
+                    الفصول الدراسية
+                  </h2>
+                  {studentClasses.length > 0 ? (
+                    studentClasses.map((cls) => (
+                      <div key={cls._id} className="mb-4 border-b last:border-0 pb-4">
+                        <h3 className="text-lg font-bold text-gray-800">{cls.name}</h3>
+                        <div className="mt-2 text-sm text-gray-600">
+                          <p className="font-semibold">المعلمين:</p>
+                          <ul className="list-disc list-inside">
+                            {cls.teachers?.map((teacher) => (
+                              <li key={teacher._id}>{teacher.name}</li>
+                            ))}
+                          </ul>
+                          <p className="font-semibold mt-2">الجدول:</p>
+                          {cls.schedule?.length > 0 ? (
+                            <ul className="list-disc list-inside">
+                              {cls.schedule.map((item, idx) => (
+                                <li key={idx}>
+                                  {getArabicDay(item.day)}: {item.startTime} - {item.endTime}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-gray-400">لا يوجد جدول</p>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">لا توجد فصول دراسية</p>
+                  )}
+                </div>
+
+                {/* Courses Card */}
+                <div className="bg-white rounded-2xl shadow-md p-5">
+                  <h2 className="text-xl font-semibold text-emerald-700 mb-4 border-b pb-2">
+                    المواد الدراسية
+                  </h2>
+                  {studentCourses.length > 0 ? (
+                    studentCourses.map((course) => (
+                      <div key={course._id} className="mb-4 border-b last:border-0 pb-4">
+                        <h3 className="text-lg font-bold text-gray-800">{course.title}</h3>
+                        <p className="text-sm text-gray-600 mt-1">{course.description}</p>
+                        <p className="text-xs text-gray-500 mt-1">تم الإضافة بواسطة: {course.createdBy?.name || "غير معروف"}</p>
+                        <p className="text-xs text-gray-500">تاريخ الإضافة: {formatDate(course.createdAt)}</p>
+
+                        {course.files?.length > 0 && (
+                          <div className="mt-2">
+                            <p className="font-semibold text-sm text-gray-700">الملفات:</p>
+                            <ul className="space-y-1 mt-1">
+                              {course.files.map((file, index) => (
+                                <li key={index}>
+                                  <a
+                                    href={`${API_URL}${file}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-emerald-600 hover:underline text-sm flex items-center"
+                                  >
+                                    📄 ملف {index + 1}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">لا توجد مواد دراسية</p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                <p className="text-gray-500 text-lg">لا يوجد طالب محدد</p>
+                {students.length === 0 && (
+                  <button
+                    onClick={() => setShowInviteModal(true)}
+                    className="mt-4 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700"
+                  >
+                    إضافة ابن
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -296,7 +433,7 @@ const ParentDashboardPage = () => {
             <div className="bg-emerald-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
               <h2 className="text-lg font-bold">الرسائل</h2>
               <button onClick={() => setShowMessageModal(false)} className="text-white">
-                &times;
+                show
               </button>
             </div>
             <div className="p-4 max-h-96 overflow-y-auto">
@@ -361,9 +498,13 @@ const ParentDashboardPage = () => {
                 className="w-full p-2 border rounded mb-2"
               >
                 <option value="">اختر المستقبل</option>
-                {selectedStudent && (
-                  <option value={selectedStudent._id}>معلم {selectedStudent.name}</option>
-                )}
+                {selectedStudent && studentClasses.map((classItem) => (
+                  classItem.teachers?.map((teacher) => (
+                    <option key={teacher._id} value={teacher._id}>
+                      معلم {selectedStudent.name} - {teacher.name}
+                    </option>
+                  ))
+                ))}
                 <option value="admin">الإدارة</option>
               </select>
               <textarea
@@ -391,7 +532,7 @@ const ParentDashboardPage = () => {
             <div className="bg-emerald-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
               <h2 className="text-lg font-bold">إضافة ابن/ابنة</h2>
               <button onClick={() => setShowInviteModal(false)} className="text-white">
-                &times;
+               show
               </button>
             </div>
             <div className="p-4">
