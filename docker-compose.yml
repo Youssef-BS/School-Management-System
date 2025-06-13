@@ -1,0 +1,33 @@
+services:
+  backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    command: npm run dev
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://admin:admin123@mongodb:27017/school?authSource=admin
+
+  frontend:
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/app
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
