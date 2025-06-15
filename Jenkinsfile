@@ -1,22 +1,27 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'NodeJS 18'      
+  }
+
+  environment {
+    SONAR_TOKEN = credentials('sonarqube-token') 
+  }
+
   stages {
-    stage('Checkout') {
+    stage('Install Dependencies') {
       steps {
-        checkout scm
+        sh 'npm install'
       }
     }
-    stage('Build') {
+
+    stage('Run SonarQube Analysis') {
       steps {
-        echo 'Building the project...'
-      }
-    }
-    stage('Test') {
-      steps {
-        echo 'Running tests...'
+        withSonarQubeEnv('SonarQube') {
+          sh 'node sonar-scanner.js'
+        }
       }
     }
   }
 }
-
