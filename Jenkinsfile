@@ -30,13 +30,14 @@ pipeline {
       steps {
         dir('server') {
           withSonarQubeEnv('SonarQube') {
-            sh '''
-              npx sonar-scanner \
-              -Dsonar.projectKey=School-Management-System \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=$SONAR_HOST_URL \
-              -Dsonar.login=$SONAR_TOKEN
-            '''
+sh '''
+  npx sonar-scanner \
+  -Dsonar.projectKey=School-Management-System \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://172.17.0.1:9000 \
+  -Dsonar.login=$SONAR_TOKEN
+'''
+
           }
         }
       }
