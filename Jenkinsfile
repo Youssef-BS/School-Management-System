@@ -29,16 +29,16 @@ pipeline {
     stage('Run SonarQube Analysis') {
       steps {
         dir('server') {
-          withSonarQubeEnv('SonarQube') {
-sh '''
-  npx sonar-scanner \
-  -Dsonar.projectKey=School-Management-System \
-  -Dsonar.sources=. \
-  -Dsonar.host.url=http://172.17.0.1:9000 \
-  -Dsonar.login=$SONAR_TOKEN
-'''
+withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+  sh """
+    npx sonar-scanner \
+      -Dsonar.projectKey=School-Management-System \
+      -Dsonar.sources=. \
+      -Dsonar.host.url=http://172.17.0.1:9000 \
+      -Dsonar.token=${SONAR_TOKEN}
+  """
+}
 
-          }
         }
       }
     }
