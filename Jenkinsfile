@@ -1,42 +1,38 @@
-
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    nodejs 'NodeJS 18'
-  }
-
-  stages {
-    stage('Install Frontend Dependencies') {
-      steps {
-        dir('client') {
-          sh 'npm install'
-        }
-      }
+    environment {
+        SONAR_HOST_URL = 'http://172.17.0.1:9000' 
+        SONAR_TOKEN = credentials('sonar-token') 
     }
 
-    stage('Install Backend Dependencies') {
-      steps {
-        dir('server') {
-          sh 'npm install'
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-      }
-    }
 
-    stage('Run SonarQube Analysis') {
-      steps {
-        dir('server') {
-          withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
-            sh """
-            npx sonar-scanner \
-              -Dsonar.projectKey=School-Management-System \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=http://172.17.0.1:9000 \
-              -Dsonar.token=$SONAR_TOKEN
-            """
-          }
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube') { 
+                    sh """
+                    sonar-scanner \
+                      -Dsonar.projectKey=School-Management-System \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=${SONAR_HOST_URL} \
+                      -Dsonar.login=${SONAR_TOKEN}
+                    """
+                }
+            }
         }
-      }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
     }
-  }
 }
