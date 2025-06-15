@@ -31,11 +31,12 @@ pipeline {
         dir('server') {
 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
   sh """
-    npx sonar-scanner \
-      -Dsonar.projectKey=School-Management-System \
-      -Dsonar.sources=. \
-      -Dsonar.host.url=http://172.17.0.1:9000 \
-      -Dsonar.token=${SONAR_TOKEN}
+npx sonar-scanner \
+  -Dsonar.projectKey=School-Management-System \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://172.17.0.1:9000 \
+  -Dsonar.token=$SONAR_TOKEN
+
   """
 }
 
